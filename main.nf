@@ -494,7 +494,7 @@ if( params.skip_trimming ){
         def tpc_r2 = three_prime_clip_r2 > 0 ? "--three_prime_clip_r2 $three_prime_clip_r2" : ''
         def rrbs = params.rrbs ? "--rrbs" : ''
         def cores = 1
-        def seq_a = params.adapter ? "--adapter" : ''
+        def seq_a = params.adapter ? "--adapter $adapter" : ''
         if(task.cpus){
             cores = (task.cpus as int) - 4
             if (params.single_end) cores = (task.cpus as int) - 3
