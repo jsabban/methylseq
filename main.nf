@@ -182,30 +182,35 @@ if(params.pbat){
     clip_r2 = 9
     three_prime_clip_r1 = 9
     three_prime_clip_r2 = 9
+    adapter = ''
 }
 else if( params.single_cell ){
     clip_r1 = 6
     clip_r2 = 6
     three_prime_clip_r1 = 6
     three_prime_clip_r2 = 6
+    adapter = ''
 }
 else if( params.epignome ){
     clip_r1 = 8
     clip_r2 = 8
     three_prime_clip_r1 = 8
     three_prime_clip_r2 = 8
+    adapter = ''
 }
 else if( params.accel || params.zymo ){
     clip_r1 = 10
     clip_r2 = 15
     three_prime_clip_r1 = 10
     three_prime_clip_r2 = 10
+    adapter = ''
 }
 else if( params.cegx ){
     clip_r1 = 6
     clip_r2 = 6
     three_prime_clip_r1 = 2
     three_prime_clip_r2 = 2
+    adapter = ''
 }
 
 if (workflow.profile.contains('awsbatch')) {
@@ -494,7 +499,7 @@ if( params.skip_trimming ){
         def tpc_r2 = three_prime_clip_r2 > 0 ? "--three_prime_clip_r2 $three_prime_clip_r2" : ''
         def rrbs = params.rrbs ? "--rrbs" : ''
         def cores = 1
-        def seq_a = params.adapter ? "--adapter $adapter" : ''
+        def seq_a = adapter.toString().size() > 4 ? "--adapter $adapter" : ''
         if(task.cpus){
             cores = (task.cpus as int) - 4
             if (params.single_end) cores = (task.cpus as int) - 3
@@ -504,12 +509,12 @@ if( params.skip_trimming ){
         if( params.single_end ) {
             """
             trim_galore --fastqc --gzip $reads \
-              $rrbs $c_r1 $tpc_r1 --cores $cores -a $seq_a
+              $rrbs $c_r1 $tpc_r1 --cores $cores $seq_a
             """
         } else {
             """
             trim_galore --fastqc --gzip --paired $reads \
-              $rrbs $c_r1 $c_r2 $tpc_r1 $tpc_r2 --cores $cores -a $seq_a
+              $rrbs $c_r1 $c_r2 $tpc_r1 $tpc_r2 --cores $cores $seq_a
             """
         }
     }
