@@ -62,6 +62,7 @@ def helpMessage() {
      --three_prime_clip_r1 [int]        Trim the specified number of bases from the 3' end of read 1 AFTER adapter/quality trimming
      --three_prime_clip_r2 [int]        Trim the specified number of bases from the 3' end of read 2 AFTER adapter/quality trimming
      --rrbs [bool]                      Turn on if dealing with MspI digested material.
+     --adapter [str]                      Adapter sequence to be trimmed. 
 
     Trimming presets:
      --pbat [bool]
@@ -175,6 +176,7 @@ clip_r1 = params.clip_r1
 clip_r2 = params.clip_r2
 three_prime_clip_r1 = params.three_prime_clip_r1
 three_prime_clip_r2 = params.three_prime_clip_r2
+adapter = params.adapter
 if(params.pbat){
     clip_r1 = 9
     clip_r2 = 9
@@ -269,7 +271,7 @@ if(params.epignome)         summary['Trim Profile'] = 'TruSeq (EpiGnome)'
 if(params.accel)            summary['Trim Profile'] = 'Accel-NGS (Swift)'
 if(params.zymo)             summary['Trim Profile'] = 'Zymo Pico-Methyl'
 if(params.cegx)             summary['Trim Profile'] = 'CEGX'
-summary['Trimming']         = "5'R1: $clip_r1 / 5'R2: $clip_r2 / 3'R1: $three_prime_clip_r1 / 3'R2: $three_prime_clip_r2"
+summary['Trimming']         = "5'R1: $clip_r1 / 5'R2: $clip_r2 / 3'R1: $three_prime_clip_r1 / 3'R2: $three_prime_clip_r2 / Adapter: $adapter"
 summary['Deduplication']    = params.skip_deduplication || params.rrbs ? 'No' : 'Yes'
 summary['Directional Mode'] = params.single_cell || params.zymo || params.non_directional ? 'No' : 'Yes'
 summary['All C Contexts']   = params.comprehensive ? 'Yes' : 'No'
@@ -492,6 +494,7 @@ if( params.skip_trimming ){
         def tpc_r2 = three_prime_clip_r2 > 0 ? "--three_prime_clip_r2 $three_prime_clip_r2" : ''
         def rrbs = params.rrbs ? "--rrbs" : ''
         def cores = 1
+        def seq_a = params.adapter ? "--adapter" : ''
         if(task.cpus){
             cores = (task.cpus as int) - 4
             if (params.single_end) cores = (task.cpus as int) - 3
@@ -501,12 +504,12 @@ if( params.skip_trimming ){
         if( params.single_end ) {
             """
             trim_galore --fastqc --gzip $reads \
-              $rrbs $c_r1 $tpc_r1 --cores $cores
+              $rrbs $c_r1 $tpc_r1 --cores $cores -a $seq_a
             """
         } else {
             """
             trim_galore --fastqc --gzip --paired $reads \
-              $rrbs $c_r1 $c_r2 $tpc_r1 $tpc_r2 --cores $cores
+              $rrbs $c_r1 $c_r2 $tpc_r1 $tpc_r2 --cores $cores -a $seq_a
             """
         }
     }
