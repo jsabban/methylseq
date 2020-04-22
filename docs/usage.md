@@ -23,7 +23,6 @@
     * [`--rrbs`](#--rrbs)
     * [`--pbat`](#--pbat)
     * [`--skip_trimming`](#--skip_trimming)
-    * [`--adapter`](#--adapter)
   * [`--skip_deduplication`](#--skip_deduplication)
   * [`--non_directional`](#--non_directional)
   * [`--comprehensive`](#--comprehensive)
