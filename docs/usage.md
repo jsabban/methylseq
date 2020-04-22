@@ -23,6 +23,7 @@
     * [`--rrbs`](#--rrbs)
     * [`--pbat`](#--pbat)
     * [`--skip_trimming`](#--skip_trimming)
+    * [`--adapter`](#--adapter)
   * [`--skip_deduplication`](#--skip_deduplication)
   * [`--non_directional`](#--non_directional)
   * [`--comprehensive`](#--comprehensive)
@@ -259,6 +260,8 @@ Bisulfite libraries often require additional base pairs to be removed from the e
   * Instructs Trim Galore to remove bp from the 3' end of read 1 _AFTER_ adapter/quality trimming has been
 * `--three_prime_clip_r2 <NUMBER>`
   * Instructs Trim Galore to re move bp from the 3' end of read 2 _AFTER_ adapter/quality trimming has been performed.
+ * `--adapter <STRING>`
+	 * Specific adapter sequence to be trimmed. If not specified explicitly, Trim Galore will try to auto-detect whether the Illumina universal, Nextera transposase or Illumina small RNA adapter sequence was used.
 
 The pipeline also accepts a number of presets for common bisulfite library preparation methods:
 
