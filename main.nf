@@ -499,7 +499,7 @@ if( params.skip_trimming ){
         def tpc_r2 = three_prime_clip_r2 > 0 ? "--three_prime_clip_r2 $three_prime_clip_r2" : ''
         def rrbs = params.rrbs ? "--rrbs" : ''
         def cores = 1
-        def seq_a = adapter.toString().size() > 4 ? "--adapter $adapter" : ''
+        def seq_a = adapter ? "--adapter $adapter" : ''
         if(task.cpus){
             cores = (task.cpus as int) - 4
             if (params.single_end) cores = (task.cpus as int) - 3
@@ -509,12 +509,12 @@ if( params.skip_trimming ){
         if( params.single_end ) {
             """
             trim_galore --fastqc --gzip $reads \
-              $rrbs $c_r1 $tpc_r1 --cores $cores $seq_a
+              $rrbs $c_r1 $tpc_r1  $seq_a --cores $cores
             """
         } else {
             """
             trim_galore --fastqc --gzip --paired $reads \
-              $rrbs $c_r1 $c_r2 $tpc_r1 $tpc_r2 --cores $cores $seq_a
+              $rrbs $c_r1 $c_r2 $tpc_r1 $tpc_r2 $seq_a --cores $cores
             """
         }
     }
